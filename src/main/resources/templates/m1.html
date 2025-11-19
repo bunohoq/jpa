@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="http://bit.ly/3WJ5ilK">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <!-- m1.html -->
+    <h1>Spring Boot <small>JPA</small></h1>
+    
+    <h2>Item 추가하기</h2>
+	
+	<form method="POST" action="/m1ok">
+	<table class="vertical">
+		<tr>
+			<th>이름</th>
+			<td><input type="text" name="name" required></td>
+		</tr>	
+		<tr>
+			<th>가격</th>
+			<td><input type="number" name="price" required min="0" max="2000000"></td>
+		</tr>	
+		<tr>
+			<th>색상</th>
+			<td>
+				<select name="color">
+					<option value="black">black</option>
+					<option value="white">white</option>
+					<option value="yellow">yellow</option>
+					<option value="red">red</option>
+					<option value="blue">blue</option>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<th>수량</th>
+			<td><input type="number" name="qty" min="1" max="10000"></td>
+		</tr>	
+		<tr>
+			<th>설명</th>
+			<td><textarea name="description" class="full"></textarea></td>
+		</tr>		
+	</table>	
+	<div>
+		<button>등록하기</button>
+	</div>
+	</form>
+	
+</body>
+</html>

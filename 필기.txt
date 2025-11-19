@@ -1,0 +1,91 @@
+프로젝트 생성
+- Name: "jpa"
+- Language: Java
+- Type: Gradle - Groovy
+- Group: "com.test"
+- Artifact: "jpa"
+- Package name: "com.test.jpa"
+- Java: 17
+- Packaging: jar
+- Dependencies:
+	- Spring Web
+	- Lombok
+	- Oracle Driver
+	- Thymeleaf
+	- Spring Boot DevTools
+	- Spring Data JPA
+
+
+
+
+JPA, Java Persistence API
+- 자바 진영 > ORM 기술 표준으로 사용되는 인터페이스
+- ORM(Object-Relational Mapping)
+
+
+JDBC 기반 기술
+1. MyBatis
+	- Mapping Framework
+	- Java <-> Oracle(관계형 DB)
+	- 클래스 객체 -> (추가) -> 오라클 레코드
+	- 오라클 레코드 -> (전달) -> 클래스 객체
+
+2. JPA
+	- ORM
+	- Java(객체) <-> 오라클(엔티티)
+	- 모든 DB 데이터 > 자바처럼 접근 + 조작 
+	- 구현체 > Hibernate
+
+
+script1.sql > 실행 > tblItem
+
+
+JPA 설정하기
+
+- build.gradle > 나중에 수정
+
+- application.yml > Thymeleaf 프로젝트
+	- JDBC 설정(DataSource)
+	- JPA 설정
+
+
+파일 생성하기
+- "com.test.jpa.controller" > "TestController.java"
+- "com.test.jpa.entity" > "Item.java"
+- "com.test.jpa.model" > "ItemDTO.java"
+- "com.test.jpa.repository" > "ItemRepository.java"(I)
+- templates > "result.html"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
