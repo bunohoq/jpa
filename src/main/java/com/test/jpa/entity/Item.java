@@ -1,5 +1,7 @@
 package com.test.jpa.entity;
 
+import com.test.jpa.model.ItemDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,6 +55,28 @@ public class Item {
 	
 	@Column(name = "description", length = 1000)
 	private String description;
+	
+	public ItemDTO toDTO() {
+		
+		return ItemDTO.builder()
+				.seq(this.seq)
+				.name(this.name)
+				.price(this.price)
+				.color(this.color)
+				.qty(this.qty)
+				.description(this.description)
+				.build();
+	}
+	
+	public void update(String name, Integer price, String color, Integer qty, String description) {
+		
+		this.name = name;
+		this.price = price;
+		this.color = color;
+		this.qty = qty;
+		this.description = description;
+	}
+	
 	
 }
 

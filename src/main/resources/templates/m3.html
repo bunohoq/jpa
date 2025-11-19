@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="http://bit.ly/3WJ5ilK">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <!-- m3.html -->
+    <h1>Spring Boot <small>JPA</small></h1>
+    
+    <h2>Item 수정하기</h2>
+	
+	<form method="POST" action="/m3ok">
+	<!-- <table class="vertical">
+		<tr>
+			<th>이름</th>
+			<td><input type="text" name="name" required th:value="${dto.name}"></td>
+		</tr>	
+		<tr>
+			<th>가격</th>
+			<td><input type="number" name="price" required min="0" max="2000000" th:value="${dto.price}"></td>
+		</tr>	
+		<tr>
+			<th>색상</th>
+			<td>
+				<select name="color">
+					<option value="black" th:selected="${dto.color == 'black'}">black</option>
+					<option value="white" th:selected="${dto.color == 'white'}">white</option>
+					<option value="yellow" th:selected="${dto.color == 'yellow'}">yellow</option>
+					<option value="red" th:selected="${dto.color == 'red'}">red</option>
+					<option value="blue" th:selected="${dto.color == 'blue'}">blue</option>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<th>수량</th>
+			<td><input type="number" name="qty" min="1" max="10000" th:value="${dto.qty}"></td>
+		</tr>	
+		<tr>
+			<th>설명</th>
+			<td><textarea name="description" class="full">[[${dto.description}]]</textarea></td>
+		</tr>		
+	</table> -->
+	
+	<table class="vertical" th:object="${dto}">
+		<tr>
+			<th>이름</th>
+			<td><input type="text" name="name" required th:field="*{name}"></td>
+		</tr>	
+		<tr>
+			<th>가격</th>
+			<td><input type="number" name="price" required min="0" max="2000000" th:field="*{price}"></td>
+		</tr>	
+		<tr>
+			<th>색상</th>
+			<td>
+				<select name="color" th:field="*{color}">
+					<option value="black">black</option>
+					<option value="white">white</option>
+					<option value="yellow">yellow</option>
+					<option value="red">red</option>
+					<option value="blue">blue</option>
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<th>수량</th>
+			<td><input type="number" name="qty" min="1" max="10000" 
+				th:field="*{qty}"></td>
+		</tr>	
+		<tr>
+			<th>설명</th>
+			<td><textarea name="description" class="full" 
+				th:field="*{description}"></textarea></td>
+		</tr>		
+	</table>
+	<div>
+		<button>수정하기</button>
+	</div>
+	<input type="hidden" name="seq" th:field="${dto.seq}">
+	</form>
+	
+</body>
+</html>

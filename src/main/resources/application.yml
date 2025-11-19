@@ -22,32 +22,11 @@ spring:
         format-sql: true # SQL 포맷 이쁘게
         highlight_sql: true # SQL 색깔 추가
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+logging:
+  level:
+    org:
+      hibernate:
+        sql: debug
+        orm:
+          jdbc:
+            bind: trace

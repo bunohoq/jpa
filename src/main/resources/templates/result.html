@@ -9,11 +9,35 @@
 	<!-- result.html -->
 	<h1>Spring Boot <small>JPA</small></h1>
 	
+	<!-- /m2 -->
+	<h3 th:if="${dto}" th:text="${dto.name}"></h3>
+	<div th:text="${dto}"></div>
+	
+	<!-- /m6 -->
+	<div th:text="${count}"></div>
+	<div th:text="${exist}"></div>
+	
+	<!-- /m7 -->
+	<table th:if="${dtoList}">
+		<tr>
+			<th>번호</th>
+			<th>이름</th>
+			<th>가격</th>
+			<th>색상</th>
+			<th>수량</th>
+			<th>설명</th>
+		</tr>
+		<tr th:each="dto : ${dtoList}" th:object="${dto}">
+			<td th:text="*{seq}"></td>
+			<td th:text="*{name}"></td>
+			<td th:text="*{#numbers.formatInteger(price, 0, 'COMMA')}" class="right"></td>
+			<td th:text="*{color}"></td>
+			<td th:text="*{qty}"></td>
+			<td th:text="*{description}" class="left"></td>
+		</tr>
+	</table>
+	
 </body>
 </html>
-
-
-
-
 
 
