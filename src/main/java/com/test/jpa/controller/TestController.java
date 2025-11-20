@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -468,6 +470,76 @@ public class TestController {
 			System.out.println(list.getSize());	//10
 			
 			
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			return "result";
+		}
+
+		@GetMapping("/m18")
+		public String m18(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") Integer page) {
+			
+			//페이징 구현
+			//
+			
+			page--;
+			
+			PageRequest pageRequest = PageRequest.of(page, 10);
+			Page<Item> list = itemRepository.findAll(pageRequest);
+			
+			//페이지 바
+			String temp = "";
+			for (int i=1; i<=list.getTotalPages(); i++) {
+				temp += """
+						<a href="/m18?page=%d">%d</a>
+						""".formatted(i,i);
+		
+			}
+			
+			model.addAttribute("temp", temp);
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			return "result";
+		}
+
+		@GetMapping("/m19")
+		public String m19(Model model, @PageableDefault(size = 10, sort = "price", direction = Sort.Direction.DESC) Pageable pageable ) {
+			
+			//PageRequest > 직접 생성
+			//Pageable > 매개변수(page, size, sort)
+			
+			//- /m19?page=1
+			Page<Item> list = itemRepository.findAll(pageable);
+			
+			System.out.println(list.getNumber());
+			System.out.println(list.getTotalPages());
+			
+			System.out.println(list.hasContent());
+			System.out.println(list.hasNext());		//true > 다음페이지가 있나
+			System.out.println(list.hasPrevious());	//false > 전페이지가 있나
+			System.out.println(list.nextOrLastPageable());
+			System.out.println(list.nextPageable());
+			System.out.println(list.previousOrFirstPageable());
+			System.out.println(list.previousPageable());
+			System.out.println(list.isFirst());		//true > 첫번째 페이지?
+			System.out.println(list.isLast());		
+			
+			
+			//페이징
+			//이전페이지 다음페이지
+			
+			String temp = "";
+			
+			temp += """
+					<a href="/m19?page=%d">이전페이지</a>
+					""".formatted(list.previousOrFirstPageable().getPageNumber());
+			temp += """
+					<a href="/m19?page=%d">다음페이지</a>
+					""".formatted(list.nextOrLastPageable().getPageNumber());
+			model.addAttribute("temp", temp);
 			
 			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
 			model.addAttribute("dtoList", dtoList);
