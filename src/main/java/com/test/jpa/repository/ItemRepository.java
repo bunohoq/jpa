@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.test.jpa.entity.Item;
+import com.test.jpa.model.ItemDTO;
 
 //엔티티 > CRUD 구현
 //- 인터페이스명 > 엔티티명+Repository
@@ -88,6 +91,23 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
 	List<Item> findByPriceGreaterThan(Sort by, Integer price);
 
+	//JPQL
+	//select * from tblItem
+	//@Query("select i from Item as i")
+	@Query(value = "select * from tblItem", nativeQuery = true)
+	List<Item> m25();
+
+	@Query("select i.name from Item as i")
+	List<String> m26();
+
+	//@Query("select i from Item as i where i.color = ?1")
+	//List<Item> m27(String color);
+
+	@Query("select i from Item as i where i.color = :color")
+	List<Item> m27(@Param(value="color") String color);
+
+	@Query("select i from Item as i where i.color = :#{#dto.color} and i.price >= :#{#dto.price}")
+	List<Item> m28(@Param(value="dto")ItemDTO dto);
 
 
 }

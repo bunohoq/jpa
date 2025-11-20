@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board {
-
+	
 	@Id
 	@SequenceGenerator(name = "seqBoardGen", allocationSize = 1, sequenceName = "seqBoard")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqBoardGen")
@@ -40,21 +41,32 @@ public class Board {
 	@Column(nullable = false)
 	private String regdate;
 	
+	//private String user; //id
+	
 	@ManyToOne
 	@JoinColumn(name = "id")
 	private User user;
 	
+	@OneToMany(mappedBy = "board")
 	private List<Tagging> taggings;
 	
 	public BoardDTO toDTO() {
 		
 		return BoardDTO.builder()
-				.seq(this.seq)
-				.subject(this.subject)
-				.content(this.content)
-				.regdate(this.regdate)
-				.user(user.getId())
-				.build();
-						
+					.seq(this.seq)
+					.subject(this.subject)
+					.content(this.content)
+					.regdate(this.regdate)
+					.user(user.getName())
+					.build();
 	}
+
 }
+
+
+
+
+
+
+
+

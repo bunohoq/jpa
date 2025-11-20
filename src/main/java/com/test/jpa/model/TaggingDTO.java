@@ -16,8 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaggingDTO {
-	
-	
+
 	private Long seq;
 	private Long tagSeq;
 	private Long boardSeq;
@@ -25,10 +24,14 @@ public class TaggingDTO {
 	public Tagging toEntity() {
 		
 		return Tagging.builder()
-						 .seq(this.seq)
-						 //.tagSeq(this.tag.getSeq())
-						 //.boardSeq(this.board.getSeq())
-						 .build();
-	}	
-
+					.seq(this.seq)
+					//.tag()
+					//.board()
+					.build();
+	}
+	
 }
+
+
+
+

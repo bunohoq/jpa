@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tag {
-	
+
 	@Id
 	@SequenceGenerator(name = "seqTagGen", allocationSize = 1, sequenceName = "seqTag")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqTagGen")
@@ -39,9 +39,15 @@ public class Tag {
 	public TagDTO toDTO() {
 		
 		return TagDTO.builder()
-					 .seq(this.seq)
-					 .tag(this.tag)
-					 .build();
+					.seq(this.seq)
+					.tag(this.tag)
+					.build();
 	}
-
+	
 }
+
+
+
+
+
+

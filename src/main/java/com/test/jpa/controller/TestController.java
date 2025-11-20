@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.test.jpa.JpaApplication;
 import com.test.jpa.entity.Board;
 import com.test.jpa.entity.Item;
+import com.test.jpa.entity.Tag;
 import com.test.jpa.entity.UserInfo;
 import com.test.jpa.model.BoardDTO;
 import com.test.jpa.model.ItemDTO;
 import com.test.jpa.repository.BoardRepository;
 import com.test.jpa.repository.ItemRepository;
+import com.test.jpa.repository.TagRepository;
 import com.test.jpa.repository.UserInfoRepository;
 import com.test.jpa.repository.UserRepository;
 
@@ -31,11 +34,16 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class TestController {
+
+    private final JpaApplication jpaApplication;
 	
 	private final ItemRepository itemRepository;
 	private final UserRepository userRepository;
 	private final UserInfoRepository userInfoRepository;
 	private final BoardRepository boardRepository;
+	private final TagRepository tagRepository;
+	
+
 	
 	//tblItem > CRUD
 	
@@ -612,6 +620,85 @@ public class TestController {
 		List<BoardDTO> blist = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
 		model.addAttribute("blist", blist);
 		
+		return "result";
+	}
+
+	@GetMapping("/m23")
+	public String m23(Model model) {
+		
+		//1:N N:1
+		//N:N
+		
+		Optional<Board> board = boardRepository.findById(10L);
+		
+		System.out.println(board);
+		System.out.println(board.get().getTaggings());
+		System.out.println(board.get().getTaggings().get(0).getTag());
+		System.out.println(board.get().getTaggings().get(1).getTag().getTag());
+		
+		model.addAttribute("board", board.get().toDTO());
+		
+		return "result";
+	}
+
+	@GetMapping("/m24")
+	public String m24(Model model) {
+		List<Tag> tlist = tagRepository.findAll();
+		
+		model.addAttribute("tlist", tlist);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m25")
+	public String m25(Model model) {
+		
+		/*
+		 	2. JPQL, Java Persistence Query Language
+		 	- JPA에서 질의에 사용하는 전용 질의문(JPA 전용 SQL)
+		 	- SQL이 객체를 대상으로 만들어졌다.
+		 	- SQL과 많이 유사
+		 
+		 */
+		
+		List<Item> list = itemRepository.m25();
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
+		return "result";
+	}
+
+	@GetMapping("/m26")
+	public String m26(Model model) {
+		
+		List<String> names = itemRepository.m26();
+		
+		model.addAttribute("names", names);
+		
+		return "result";
+	}
+
+	@GetMapping("/m27")
+	public String m27(Model model, @RequestParam(defaultValue = "blue") String color) {
+		
+		//- /m27
+		//- /m27?colore=white
+		List<Item> list = itemRepository.m27(color);
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m28")
+	public String m28(Model model, ItemDTO dto) {
+		
+		//- /m28?color=white&price-300000
+		List<Item> list = itemRepository.m28(dto);
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
 		return "result";
 	}
 

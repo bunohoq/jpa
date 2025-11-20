@@ -61,6 +61,41 @@
 		</tr>
 	</table>
 	
+	<!-- /m23 -->
+	<table th:if="${board}">
+		<tr>
+			<th>제목</th>
+			<td th:text="${board.subject}"></td>
+		</tr>
+		<tr>
+			<th>태그</th>
+			<td>
+				<span th:each="taggings : ${board.taggings}"
+					th:text="${taggings.tag.tag}"></span>
+			</td>
+		</tr>
+	</table>
+	
+	<!-- /m24 -->
+	<table th:if="${tlist}">
+		<tr>
+			<th>태그</th>
+			<th>게시물</th>
+		</tr>
+		<tr th:each="tag : ${tlist}">
+			<td th:text="${tag.tag}"></td>
+			<td>
+				<ul>
+					<li th:each="taggings :${tag.taggings}"
+						th:text="${taggings.board.subject}"></li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+	
+	<!-- /m26 -->
+	<div th:text="${names}"></div>
+	
 	
 </body>
 </html>

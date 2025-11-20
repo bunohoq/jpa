@@ -22,12 +22,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tagging {
-
+	
 	@Id
 	@SequenceGenerator(name = "seqTaggingGen", allocationSize = 1, sequenceName = "seqTagging")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqTaggingGen")
 	private Long seq;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "tseq")
 	private Tag tag;
@@ -39,9 +39,10 @@ public class Tagging {
 	public TaggingDTO toDTO() {
 		
 		return TaggingDTO.builder()
-						 .seq(this.seq)
-						 .tagSeq(this.tag.getSeq())
-						 .boardSeq(this.board.getSeq())
-						 .build();
+					.seq(this.seq)
+					.tagSeq(this.tag.getSeq())
+					.boardSeq(this.board.getSeq())
+					.build();
 	}
+
 }

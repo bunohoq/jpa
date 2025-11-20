@@ -23,9 +23,14 @@ public class TagDTO {
 	public Tag toEntity() {
 		
 		return Tag.builder()
-					 .seq(this.seq)
-					 .tag(this.tag)
-					 .build();
+					.seq(this.seq)
+					.tag(this.tag)
+					.build();
 	}
 
 }
+
+
+
+
+
