@@ -38,6 +38,29 @@
 	</table>
 	<div th:utext="${temp}"></div>
 	
+	<!-- /m20 -->
+	<h3 th:if="${user}" th:text="${user.name}"></h3>
+	<div th:if="${user}" th:text="${user}"></div>
+	<div th:if="${userinfo}" th:text="${userinfo}"></div>
+	
+	<!-- /m22 -->
+	<!-- /* <ul>
+		<li th:each="entity : ${boards}" th:text="${entity.subject}"></li>
+	</ul> */-->
+	
+	<table th:if="${blist}">
+		<tr>
+			<th>번호</th>	
+			<th>제목</th>	
+			<th>회원</th>	
+		</tr>
+		<tr th:each="dto :${blist}" th:object="${dto}">
+			<td th:text="*{seq}"></td>
+			<td th:text="*{subject}"></td>
+			<td th:text="*{user}"></td>
+		</tr>
+	</table>
+	
 	
 </body>
 </html>
