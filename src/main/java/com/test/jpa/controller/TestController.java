@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.test.jpa.JpaApplication;
 import com.test.jpa.entity.Item;
 import com.test.jpa.model.ItemDTO;
 import com.test.jpa.repository.ItemRepository;
@@ -284,6 +287,190 @@ public class TestController {
 			model.addAttribute("dtoList", dtoList);
 			
 
+			
+			return "result";
+		}
+
+		@GetMapping("/m11")
+		public String m11(Model model) {
+			
+			//After, Before
+			//GreaterThan(GreaterThanEqual), LessThan(LessThanEqual)
+			//Between
+			
+			//After, GreaterThan(GreaterThanEqual) : 크다
+			//Before, LessThan(LessThanEqual) : 작다
+			
+			//After, Before : 날짜시간 비교
+			//GreaterThan, LessThan : 숫자 비교
+			//Between : 날짜시간, 숫자비교
+			
+			//List<Item> list = itemRepository.findByPriceGreaterThan(550000);
+			//List<Item> list = itemRepository.findByPriceGreaterThanEqual(550000);
+			//List<Item> list = itemRepository.findByPriceLessThanEqual(550000);
+			//List<Item> list = itemRepository.findByColorAndPriceGreaterThan("blue", 200000);
+			List<Item> list = itemRepository.findByPriceBetween(100000, 3000000);
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			
+			return "result";
+		}
+
+		@GetMapping("/m12")
+		public String m12(Model model) {
+			
+			//isEmpty, isNUll
+			//isNotEmpty, isNotNull
+			// - isNull > null 체크(where tel is null)
+			// - isEmpty > 빈문자열, 집합(size: 0) 등을 체크
+			
+			//qty, description
+			//List<Item> list = itemRepository.findByQtyIsNull();
+			//List<Item> list = itemRepository.findByDescriptionIsNull();
+			//List<Item> list = itemRepository.findByDescriptionIsNullAndQtyIsNull();
+			List<Item> list = itemRepository.findByDescriptionIsNotNullAndColorAndPriceGreaterThanEqual("white", 300000);
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			
+			
+			return "result";
+		}
+
+		@GetMapping("/m13")
+		public String m13(Model model) {
+			
+			//In, NotIn
+			// - 열거형 조건
+			// - where color in ('white', 'black)
+			// - 매개변수 > List 전달
+			
+			List<String> colors = List.of("white", "black"); ///수정불가능
+			
+			//List<Item> list = itemRepository.findByColorIn(colors);
+			List<Item> list = itemRepository.findByColorNotIn(colors);
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			return "result";
+		}
+		
+		@GetMapping("/m14")
+		public String m14(Model model) {
+			
+			//StartsWith, StartingWith
+			//EndsWith, EndingWith
+			//Contains
+			//Like
+			
+			//List<Item> list = itemRepository.findByNameStartsWith("스마트");
+			//List<Item> list = itemRepository.findByNameEndsWith("스피커");
+			//List<Item> list = itemRepository.findByDescriptionContains("기능");
+			//List<Item> list = itemRepository.findByDescriptionNotContains("기능");
+			List<Item> list = itemRepository.findByDescriptionLike("%기능%");
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			return "result";
+		}
+
+		@GetMapping("/m15")
+		public String m15(Model model) {
+			
+			//정렬
+			//- OrderBy컬럼명Asc
+			//- OrderBy컬럼명Desc
+			
+			//다중 정렬
+			//- OrderBy컬럼명Asc컬럼명Desc컬럼명Asc
+			
+			//List<Item> list = itemRepository.findAll();
+			//List<Item> list = itemRepository.findAllByOrderByNameAsc();
+			//List<Item> list = itemRepository.findAllByOrderByNameDesc();
+			//List<Item> list = itemRepository.findByColorOrderByPriceDesc("blue");
+			List<Item> list = itemRepository.findAllByOrderByColorAscPriceDesc();
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			
+			return "result";
+		}
+
+		@GetMapping("/m15_1")
+		public String m15_1(Model model
+				, @RequestParam("price") Integer price
+				, @RequestParam("order") String orderString) {
+			
+			//- /m15_1?price=300000&order=asc
+			//- /m15_1?price=300000&order=desc
+			
+			//List<Item> list = itemRepository.findByPriceGreaterThan(price);
+			//List<Item> list = itemRepository.findByPriceGreaterThanOrderByPriceAsc(price);
+			//List<Item> list = itemRepository.findByPriceGreaterThanOrderByPriceDesc(price);
+			
+			Direction order = Sort.Direction.ASC;
+
+			if (orderString.equals("desc")) {
+				order = Sort.Direction.DESC;
+			}
+			
+			List<Item> list 
+			= itemRepository.findByPriceGreaterThan(Sort.by(order, "price"), price);
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			return "result";
+		}
+
+
+		@GetMapping("/m16")
+		public String m16(Model model) {
+			
+			//List<Item> list = itemRepository.findAllByOrderByPriceAsc();
+			//List<Item> list = itemRepository.findAll(Sort.by("price"));
+			//List<Item> list = itemRepository.findAll(Sort.by(Sort.Direction.DESC, "price"	));
+			
+			List<Item> list = itemRepository
+					.findAll(
+							Sort.by(
+									Sort.Order.asc("color"), 
+									Sort.Order.desc("price")
+									)
+							);
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
+			
+			return "result";
+		}
+
+		@GetMapping("/m17")
+		public String m17(Model model) {
+			
+			//페이징
+			PageRequest pageRequest = PageRequest.of(0, 10);
+			
+			//list 대신 page
+			Page<Item> list = itemRepository.findAll(pageRequest);
+			
+			//Page 배열 > 페이징과 관련된 여러가지 정보를 제공
+			System.out.println(list.getNumber()); //0 > 페이지번호
+			System.out.println(list.getNumberOfElements()); //10 > 가져온 엔티티수
+			System.out.println(list.getTotalElements()); //31 
+			System.out.println(list.getTotalPages());	//4
+			System.out.println(list.getSize());	//10
+			
+			
+			
+			List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+			model.addAttribute("dtoList", dtoList);
 			
 			return "result";
 		}
