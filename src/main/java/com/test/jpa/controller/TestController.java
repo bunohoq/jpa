@@ -702,6 +702,28 @@ public class TestController {
 		return "result";
 	}
 
+	@GetMapping("/m29")
+	public String m29(Model model) {
+		
+		/*
+		 									방언(Dialect)
+		 	findFirst5By...				   (변환) > rownum
+		 								   (변환) > limit
+		 								   (변환) > top
+		 								   
+		 	Query Method > (변환) > JPQL > (변환) > SQL
+		 	Query DSL 	 > (변환) > JPQL > (변환) > SQL
+		 	
+		 	3. Query DSL
+		 	- JPQL 작성을 도와주는 동적 쿼리 빌더
+		 	- 정해진 메서드를 사용 > 쿼리 생성
+		 	- 엔티티의 관련된 조작을 하는 메서드를 생성해주는 Qclass를 생성
+		 
+		 */
+		
+		return "result";
+	}
+
 	@GetMapping("/m")
 	public String m(Model model) {
 		
