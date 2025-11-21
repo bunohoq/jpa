@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.querydsl.core.Tuple;
+import com.test.jpa.config.QueryDSLConfig;
 import com.test.jpa.entity.Board;
 import com.test.jpa.entity.Item;
 import com.test.jpa.entity.Tag;
+import com.test.jpa.entity.User;
 import com.test.jpa.entity.UserInfo;
 import com.test.jpa.model.BoardDTO;
 import com.test.jpa.model.ItemDTO;
@@ -28,6 +30,7 @@ import com.test.jpa.repository.ItemQueryDSLRepository;
 import com.test.jpa.repository.ItemRepository;
 import com.test.jpa.repository.TagRepository;
 import com.test.jpa.repository.UserInfoRepository;
+import com.test.jpa.repository.UserQueryDSLRepository;
 import com.test.jpa.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestController {
 
+    private final QueryDSLConfig queryDSLConfig;
+
     private final TagRepository tagRepository;
 	
 	private final ItemRepository itemRepository;
@@ -43,6 +48,8 @@ public class TestController {
 	private final UserInfoRepository userInfoRepository;
 	private final BoardRepository boardRepository;
 	private final ItemQueryDSLRepository itemQueryDSLRepository;
+	private final UserQueryDSLRepository userQueryDSLRepository;
+	
 	
 	//tblItem > CRUD
 	
@@ -836,13 +843,71 @@ public class TestController {
 	public String m37(Model model) {
 		
 		//집계함수
-		Long num = itemQueryDSLRepository.m37();
+		//Object num = itemQueryDSLRepository.m37();
+		//model.addAttribute("num", num);
+	
+		Tuple tuple = itemQueryDSLRepository.m37_1();
+		model.addAttribute("tuple", tuple);
 		
-		model.addAttribute("num", num);
 		
 		return "result";
 	}
 	
+	@GetMapping("/m38")
+	public String m38(Model model) {
+		
+		//그룹 + 집계
+		List<Tuple> glist = itemQueryDSLRepository.m38();
+		
+		model.addAttribute("glist", glist);
+		
+		return "result";
+	}
+
+	@GetMapping("/m39")
+	public String m39(Model model) {
+		
+		//Join
+		//1:1
+		User user = userQueryDSLRepository.m39();
+		
+		model.addAttribute("user", user.toDTO());
+		model.addAttribute("userinfo", user.getUserInfo().toDTO());
+		
+		
+		return "result";
+	}
+
+	@GetMapping("/m40")
+	public String m40(Model model) {
+		
+		//Join
+		//1:N
+		List<User> ulist = userQueryDSLRepository.m40();
+		
+		model.addAttribute("ulist", ulist);
+		
+		return "result";
+	}
+
+	@GetMapping("/m41")
+	public String m41(Model model) {
+		
+		//서브쿼리
+		//- where절(O)
+		//- select절(O)
+		//- from절(X)
+		
+		// select * from tblItem where price >= (select avg(price) from tblItem)
+		List<Item> list = itemQueryDSLRepository.m42();
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
+		
+		return "result";
+	}
+
 	@GetMapping("/m")
 	public String m(Model model) {
 		
@@ -850,10 +915,3 @@ public class TestController {
 	}
 	
 }
-
-
-
-
-
-
-

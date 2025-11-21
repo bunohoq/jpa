@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.test.jpa.entity.Item;
+import com.test.jpa.entity.QItem;
 import com.test.jpa.model.ItemDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -172,7 +174,7 @@ public class ItemQueryDSLRepository {
 					.fetch();
 	}
 
-	public Long m37() {
+	public Object m37() {
 		
 		//count(), sum(), avg(), max(), min()
 		
@@ -182,11 +184,54 @@ public class ItemQueryDSLRepository {
 //				.fetchCount();
 		
 		//select count(*) from..
+		//select count(qty) from..
 		return factory
-				.select(item.count())
+				//.select(item.count())
+				//.select(item.count())
+				.select(item.qty.avg())
 				.from(item)
 				.fetchOne();
 				
+	}
+
+	public Tuple m37_1() {
+		
+		return factory
+					.select(item.count()
+							, item.price.max()
+							, item.price.min()
+							, item.price.sum()
+							, item.price.avg())
+					.from(item)
+					.fetchOne();
+	}
+
+	public List<Tuple> m38() {
+		
+		//groupBy()
+		//having()
+		
+		return factory
+					.select(item.color, item.count(), item.price.avg())
+					.from(item)
+					.groupBy(item.color)
+					.having(item.count().goe(5))
+					.fetch();
+	}
+
+	public List<Item> m42() {
+		// select * from tblItem where price >= (select avg(price) from tblItem)
+		
+		QItem item2 = QItem.item;
+		
+		return factory
+					.selectFrom(item)
+					.where(item.price.goe(
+							JPAExpressions.select(item2.price.avg()).from(item2)
+							)
+					)
+					.fetch();
+			
 	}
 	
 }
