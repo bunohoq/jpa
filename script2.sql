@@ -1,3 +1,4 @@
+
 -- 회원 테이블
 drop table tblUser;
 
@@ -46,6 +47,7 @@ create sequence seqComment start with 16;
 
 -- 태그 테이블
 drop table tblTag;
+drop sequence seqTag;
 
 create table tblTag (
     seq number primary key,
@@ -55,6 +57,7 @@ create sequence seqTag start with 6;
 
 -- 태깅 테이블
 drop table tblTagging;
+drop sequence seqTagging;
 
 create table tblTagging (
     seq number primary key,
@@ -136,3 +139,10 @@ insert into tblTagging (seq, tseq, bseq) values (9, 4, 8);
 insert into tblTagging (seq, tseq, bseq) values (10, 4, 9);
 
 commit;
+
+select * from tblUser;
+select * from tblUserInfo;
+select * from tblBoard;
+select * from tblComment;
+select * from tblTag;
+select * from tblTagging;commit;

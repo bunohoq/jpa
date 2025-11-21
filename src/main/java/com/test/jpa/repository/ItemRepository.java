@@ -31,7 +31,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
 	Optional<Item> findFirstByPrice(int i);
 
-	List<Item> findFirst5ByColor(String string);
+	List<Item> findFirst3ByColor(String string);
 
 	List<Item> findTop5ByColor(String string);
 
@@ -86,13 +86,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	List<Item> findByPriceGreaterThanOrderByPriceAsc(Integer price);
 
 	List<Item> findByPriceGreaterThanOrderByPriceDesc(Integer price);
-	
+
 	List<Item> findAllByOrderByPriceAsc();
 
 	List<Item> findByPriceGreaterThan(Sort by, Integer price);
 
 	//JPQL
-	//select * from tblItem
+	//- select * from tblItem
 	//@Query("select i from Item as i")
 	@Query(value = "select * from tblItem", nativeQuery = true)
 	List<Item> m25();
@@ -100,14 +100,30 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	@Query("select i.name from Item as i")
 	List<String> m26();
 
-	//@Query("select i from Item as i where i.color = ?1")
-	//List<Item> m27(String color);
-
+//	@Query("select i from Item as i where i.color = ?1")
+//	List<Item> m27(String color);
+	
 	@Query("select i from Item as i where i.color = :color")
 	List<Item> m27(@Param(value="color") String color);
 
 	@Query("select i from Item as i where i.color = :#{#dto.color} and i.price >= :#{#dto.price}")
-	List<Item> m28(@Param(value="dto")ItemDTO dto);
-
+	List<Item> m28(@Param(value="dto") ItemDTO dto);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

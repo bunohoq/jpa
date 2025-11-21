@@ -11,16 +11,33 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class QueryDSLConfig {
-	
+
 	private final EntityManager em;
 	
 	//<bean class="com.querydsl.jpa.impl.JPAQueryFactory">
 	//	<constructor-arg ref="em" />
 	//</bean>
-
+	
 	@Bean
-	public JPAQueryFactory jpaQueryFactory() {
+	public JPAQueryFactory jPAQueryFactory() {
 		
 		return new JPAQueryFactory(em);
 	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -24,19 +24,33 @@ public class ItemDTO {
 	private Integer qty;
 	private String description;
 	
+	public ItemDTO(String name, String color, Integer price) {
+		 this.name = name;
+		 this.color = color;
+		 this.price = price;
+	}
+	
 	public Item toEntity() {
 		
+		//매핑 메서드
 		return Item.builder()
-				.seq(this.seq)
-				.name(this.name)
-				.price(this.price)
-				.color(this.color)
-				.qty(this.qty)
-				.description(this.description)
-				.build();
+					.seq(this.seq)
+					.name(this.name)
+					.price(this.price)
+					.color(this.color)
+					.qty(this.qty)
+					.description(this.description)
+					.build();
 	}
 
 }
+
+
+
+
+
+
+
 
 
 

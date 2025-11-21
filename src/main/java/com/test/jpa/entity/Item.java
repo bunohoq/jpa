@@ -34,7 +34,7 @@ import lombok.ToString;
 @Table(name = "tblItem") // JPA > DB > tbl_item
 public class Item {
 	
-	@Id //PK
+	@Id //PK 필수!!
 	@Column(name = "seq") //실제 테이블의 컬럼명. 생략 가능
 	@SequenceGenerator(name = "seqItemGen", allocationSize = 1, sequenceName = "seqItem")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqItemGen")
@@ -68,6 +68,7 @@ public class Item {
 				.build();
 	}
 	
+	//Setter 역할
 	public void update(String name, Integer price, String color, Integer qty, String description) {
 		
 		this.name = name;
@@ -75,8 +76,8 @@ public class Item {
 		this.color = color;
 		this.qty = qty;
 		this.description = description;
+		
 	}
-	
 	
 }
 

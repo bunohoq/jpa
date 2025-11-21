@@ -43,3 +43,9 @@ insert into tblItem (seq, name, price, color, qty, description) values (29, '전
 insert into tblItem (seq, name, price, color, qty, description) values (30, '블루투스 이어폰', 120000, 'black', 45, '무선으로 편리한 블루투스 이어폰입니다. 청음 성능 탁월.');
 
 commit;
+
+select * from tblItem order by price desc;
+
+select * from tblItem where seq = 52;
+
+select * from tblItem where color = 'black';

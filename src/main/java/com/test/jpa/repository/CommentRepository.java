@@ -1,5 +1,5 @@
 package com.test.jpa.repository;
 
-public interface CommonRepository {
+public interface CommentRepository {
 
 }

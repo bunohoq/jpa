@@ -57,11 +57,37 @@ JPA 설정하기
 - templates > "result.html"
 
 
+파일 생성하기
+- com.test.jap.entity > "User.java"
+- com.test.jap.entity > "UserInfo.java"
+- com.test.jap.entity > "Board.java"
+- com.test.jap.entity > "Comment.java"
+- com.test.jap.entity > "Tag.java"
+- com.test.jap.entity > "Tagging.java"
+
+- com.test.jpa.repository > "UserRepository.java"
+- com.test.jpa.repository > "UserInfoRepository.java"
+- com.test.jpa.repository > "BoardRepository.java"
+- com.test.jpa.repository > "CommentRepository.java"
+- com.test.jpa.repository > "TagRepository.java"
+- com.test.jpa.repository > "TaggingRepository.java"
+
+- com.test.jap.dto > "UserDTO.java"
+- com.test.jap.dto > "UserInfoDTO.java"
+- com.test.jap.dto > "BoardDTO.java"
+- com.test.jap.dto > "CommentDTO.java"
+- com.test.jap.dto > "TagDTO.java"
+- com.test.jap.dto > "TaggingDTO.java"
 
 
 
 
+Query DSL 설정하기
+- build.gradle
 
+
+Query DSL 설정 파일
+- "com.test.jpa.config" > "QueryDSLConfig.java"  //스프링 빈 파일
 
 
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.test.jpa.JpaApplication;
+import com.querydsl.core.Tuple;
 import com.test.jpa.entity.Board;
 import com.test.jpa.entity.Item;
 import com.test.jpa.entity.Tag;
@@ -24,6 +24,7 @@ import com.test.jpa.entity.UserInfo;
 import com.test.jpa.model.BoardDTO;
 import com.test.jpa.model.ItemDTO;
 import com.test.jpa.repository.BoardRepository;
+import com.test.jpa.repository.ItemQueryDSLRepository;
 import com.test.jpa.repository.ItemRepository;
 import com.test.jpa.repository.TagRepository;
 import com.test.jpa.repository.UserInfoRepository;
@@ -35,15 +36,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final JpaApplication jpaApplication;
+    private final TagRepository tagRepository;
 	
 	private final ItemRepository itemRepository;
 	private final UserRepository userRepository;
 	private final UserInfoRepository userInfoRepository;
 	private final BoardRepository boardRepository;
-	private final TagRepository tagRepository;
-	
-
+	private final ItemQueryDSLRepository itemQueryDSLRepository;
 	
 	//tblItem > CRUD
 	
@@ -569,9 +568,6 @@ public class TestController {
 		return "result";
 	}
 	
-	
-
-
 	@GetMapping("/m20")
 	public String m20(Model model) {
 		
@@ -628,21 +624,21 @@ public class TestController {
 		
 		//1:N N:1
 		//N:N
-		
 		Optional<Board> board = boardRepository.findById(10L);
 		
 		System.out.println(board);
 		System.out.println(board.get().getTaggings());
-		System.out.println(board.get().getTaggings().get(0).getTag());
+		System.out.println(board.get().getTaggings().get(0).getTag().getTag());
 		System.out.println(board.get().getTaggings().get(1).getTag().getTag());
 		
-		model.addAttribute("board", board.get().toDTO());
+		model.addAttribute("board", board.get());
 		
 		return "result";
 	}
 
 	@GetMapping("/m24")
 	public String m24(Model model) {
+		
 		List<Tag> tlist = tagRepository.findAll();
 		
 		model.addAttribute("tlist", tlist);
@@ -652,22 +648,22 @@ public class TestController {
 	
 	@GetMapping("/m25")
 	public String m25(Model model) {
-		
+	
 		/*
-		 	2. JPQL, Java Persistence Query Language
-		 	- JPA에서 질의에 사용하는 전용 질의문(JPA 전용 SQL)
-		 	- SQL이 객체를 대상으로 만들어졌다.
-		 	- SQL과 많이 유사
-		 
-		 */
+			2. JPQL, Java Persistence Query Language
+			- JPA에서 질의에 사용하는 전용 질의문(JPA 전용 SQL)
+			- JPQL이 객체를 대상(*****)으로 만들어졌다.
+			- SQL과 많이 유사
+		*/
 		
 		List<Item> list = itemRepository.m25();
+		
 		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
 		model.addAttribute("dtoList", dtoList);
 		
 		return "result";
 	}
-
+	
 	@GetMapping("/m26")
 	public String m26(Model model) {
 		
@@ -677,12 +673,13 @@ public class TestController {
 		
 		return "result";
 	}
-
+	
 	@GetMapping("/m27")
-	public String m27(Model model, @RequestParam(defaultValue = "blue") String color) {
+	public String m27(Model model
+		, @RequestParam(name = "color", defaultValue = "black") String color) {
 		
 		//- /m27
-		//- /m27?colore=white
+		//- /m27?color=white
 		List<Item> list = itemRepository.m27(color);
 		
 		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
@@ -694,36 +691,158 @@ public class TestController {
 	@GetMapping("/m28")
 	public String m28(Model model, ItemDTO dto) {
 		
-		//- /m28?color=white&price-300000
+		//- /m28?color=white&price=300000
 		List<Item> list = itemRepository.m28(dto);
 		
 		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
 		model.addAttribute("dtoList", dtoList);
+		
 		return "result";
 	}
-
+	
 	@GetMapping("/m29")
 	public String m29(Model model) {
 		
 		/*
-		 									방언(Dialect)
-		 	findFirst5By...				   (변환) > rownum
-		 								   (변환) > limit
-		 								   (변환) > top
-		 								   
-		 	Query Method > (변환) > JPQL > (변환) > SQL
-		 	Query DSL 	 > (변환) > JPQL > (변환) > SQL
-		 	
-		 	3. Query DSL
-		 	- JPQL 작성을 도와주는 동적 쿼리 빌더
-		 	- 정해진 메서드를 사용 > 쿼리 생성
-		 	- 엔티티의 관련된 조작을 하는 메서드를 생성해주는 Qclass를 생성
-		 
-		 */
+			                               방언(Dialect)
+			findFirst3By..                 (변환) > rownum
+			                               (변환) > limit
+			                               (변환) > top
+			
+			Query Method > (변환) > JPQL > (변환) > SQL
+			Query DSL    > (변환) > JPQL > (변환) > SQL
+			
+			3. Query DSL
+			- JPQL 작성을 도와주는 동적 쿼리 빌더
+			- 정해진 메서드를 사용 > 쿼리 생성
+			- 엔티티의 관련된 조작을 하는 메서드를 생성해주는 QClass를 생성
+			
+		*/
+		
+		//전체 리스트 조회
+		List<Item> list = itemQueryDSLRepository.m29();
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
 		
 		return "result";
 	}
-
+	
+	@GetMapping("/m30")
+	public String m30(Model model, @RequestParam(name = "name", defaultValue = "노트북") String name) {
+		
+		//- /m30?name=태블릿
+		
+		//레코드 1개 반환
+		//- 조건절: where() 메서드
+		//- fetchOne()
+		
+		Item item = itemQueryDSLRepository.m30(name);
+		
+		model.addAttribute("dto", item.toDTO());
+		
+		return "result";
+	}
+	
+	@GetMapping("/m31")
+	public String m31(Model model) {
+		
+		List<String> names = itemQueryDSLRepository.m31();
+		
+		model.addAttribute("names", names);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m32")
+	public String m32(Model model) {
+		
+		//일부 컬럼 조회 > Entity 사용X
+		//1. Tuple
+		//2. DTO
+		
+		List<Tuple> tupleList = itemQueryDSLRepository.m32();
+		
+		model.addAttribute("tupleList", tupleList);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m33")
+	public String m33(Model model) {
+		
+		//일부 컬럼 조회 > Entity 사용X
+		//1. Tuple
+		//2. DTO
+		
+		//일부 컬럼 조회
+		//1. Entity > 편함, 모든컬럼. 사용하지 않을 컬럼까지 가져옴(낭비)
+		//2. Tuple > 조금 편함. 컬럼 인덱스 접근(불편)
+		//3. DTO > 불편함. Tuple보다 안정적
+		
+		List<ItemDTO> list = itemQueryDSLRepository.m33();
+		
+		model.addAttribute("dtoList", list);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m34")
+	public String m34(Model model, ItemDTO dto) {
+		
+		//where()
+		List<Item> list = itemQueryDSLRepository.m34(dto);
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m35")
+	public String m35(Model model) {
+		
+		//정렬
+		List<Item> list = itemQueryDSLRepository.m35();
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m36")
+	public String m36(Model model
+			, @RequestParam(name = "page", defaultValue = "1") Integer page) {
+		
+		//페이징
+		//- offset: 가져올 레코드의 시작 위치(begin)
+		//- limit: 가져올 개수(size)
+		
+		//- offset: 0
+		//- limit: 10
+		int offset = (page - 1) * 10;
+		int limit = 10;
+		
+		List<Item> list = itemQueryDSLRepository.m36(offset, limit);
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
+		return "result";
+	}
+	
+	@GetMapping("/m37")
+	public String m37(Model model) {
+		
+		//집계함수
+		Long num = itemQueryDSLRepository.m37();
+		
+		model.addAttribute("num", num);
+		
+		return "result";
+	}
+	
 	@GetMapping("/m")
 	public String m(Model model) {
 		
@@ -731,3 +850,10 @@ public class TestController {
 	}
 	
 }
+
+
+
+
+
+
+
