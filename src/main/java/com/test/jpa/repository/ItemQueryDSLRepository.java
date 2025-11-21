@@ -3,10 +3,10 @@ package com.test.jpa.repository;
 import static com.test.jpa.entity.QItem.item;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
@@ -219,7 +219,7 @@ public class ItemQueryDSLRepository {
 					.fetch();
 	}
 
-	public List<Item> m42() {
+	public List<Item> m41() {
 		// select * from tblItem where price >= (select avg(price) from tblItem)
 		
 		QItem item2 = QItem.item;
@@ -233,17 +233,38 @@ public class ItemQueryDSLRepository {
 					.fetch();
 			
 	}
+
+	public List<Tuple> m42() {
+		
+		//select name, price, (select avg(price) from tblItem) from tblItem;
+		QItem item2 = QItem.item;
+		return factory
+					.select(item.name
+							, item.price
+							, JPAExpressions
+								.select(item2.price.avg())
+								.from(item2))
+					.from(item)
+					.fetch();
+	}
+
+		public List<Item> m43(ItemDTO dto) {
+		
+			//조건절 생성기
+			BooleanBuilder builder = new BooleanBuilder();
+			
+			if (dto.getColor() != null) {
+				builder.and(item.color.eq(dto.getColor()));
+			}
+			
+			if (dto.getPrice() != null) {
+				builder.and(item.price.goe(dto.getPrice()));
+			}
+			
+			return factory
+						.selectFrom(item)
+						.where(builder)
+						.fetch();
+		}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-

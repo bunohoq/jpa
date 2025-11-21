@@ -899,7 +899,7 @@ public class TestController {
 		//- from절(X)
 		
 		// select * from tblItem where price >= (select avg(price) from tblItem)
-		List<Item> list = itemQueryDSLRepository.m42();
+		List<Item> list = itemQueryDSLRepository.m41();
 		
 		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
 		model.addAttribute("dtoList", dtoList);
@@ -908,8 +908,31 @@ public class TestController {
 		return "result";
 	}
 
-	@GetMapping("/m")
-	public String m(Model model) {
+	@GetMapping("/m42")
+	public String m42(Model model) {
+		
+		List<Tuple> dlist = itemQueryDSLRepository.m42();
+		
+		model.addAttribute("dlist", dlist);
+		
+		return "result";
+	}
+
+	@GetMapping("/m43")
+	public String m(Model model, ItemDTO dto) {
+		
+		//동적쿼리
+		//- /m43 > select * from tblItem
+		//- /m43?color=blue > select * from tblItem where color = 'blue'
+		//- /m43?price=100000 > select * from tblItem where price >= 100000
+		//- /m43?color=blueprice=100000 
+		//	> select * from tblItem where color = 'blue' and price >= 100000
+		
+		List<Item> list = itemQueryDSLRepository.m43(dto);
+		
+		List<ItemDTO> dtoList = list.stream().map(item -> item.toDTO()).collect(Collectors.toList());
+		model.addAttribute("dtoList", dtoList);
+		
 		
 		return "result";
 	}

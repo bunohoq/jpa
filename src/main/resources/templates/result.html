@@ -162,6 +162,20 @@
 			</td>
 		</tr>
 	</table>
+
+	<!-- /m42 -->
+	<table th:if="${dlist}">
+		<tr>
+			<th>이름</th>
+			<th>가격</th>
+			<th>평균가격</th>
+		</tr>
+		<tr th:each="tuple : ${dlist}">
+			<td th:text="${tuple.get(0, String)}"></td>
+			<td th:text="${tuple.get(1, Integer)}"></td>
+			<td th:text="${tuple.get(2, Double)}"></td>
+		</tr>
+	</table>
 	
 	
 </body>
